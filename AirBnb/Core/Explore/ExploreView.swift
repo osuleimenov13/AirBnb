@@ -12,6 +12,7 @@ struct ExploreView: View {
         NavigationStack {
             ScrollView {
                 SearchAndFilterBar()
+                
                 LazyVStack(spacing: 32) {
                     ForEach(0...10, id: \.self) { listing in
                         NavigationLink(value: listing) {
@@ -21,7 +22,8 @@ struct ExploreView: View {
                 }
             }
             .navigationDestination(for: Int.self) { listing in
-                Text("Details...")
+                ListingDetailView()
+                    .navigationBarBackButtonHidden()
             }
         }
     }
