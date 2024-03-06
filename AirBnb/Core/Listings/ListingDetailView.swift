@@ -11,15 +11,8 @@ import MapKit
 struct ListingDetailView: View {
     
     @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(
-            latitude: 25.7617,
-            longitude: 80.1918
-        ),
-        span: MKCoordinateSpan(
-            latitudeDelta: 10,
-            longitudeDelta: 10
-        )
-    )
+        center: CLLocationCoordinate2D(latitude: 25.7617, longitude: 80.1918),
+        span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
     
     @Environment(\.dismiss) var dismiss
 
@@ -177,6 +170,7 @@ struct ListingDetailView: View {
             }
             .padding()
         }
+        .toolbar(.hidden, for: .tabBar)
         .ignoresSafeArea()
         .padding(.bottom, 64)
         .overlay(alignment: .bottom) {
