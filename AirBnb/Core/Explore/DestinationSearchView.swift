@@ -14,18 +14,21 @@ enum DestinationSearchOptions {
 }
 
 struct DestinationSearchView: View {
+    
+    @ObservedObject var viewModel: ExploreViewModel
     @Binding var show: Bool
-    @State private var destination = ""
+    
     @State private var selectedOption: DestinationSearchOptions = .location
     @State private var startDate = Date()
     @State private var endDate = Date()
     @State private var numGuests = 0
-    
+        
     var body: some View {
         VStack {
             HStack {
                 Button {
                     withAnimation {
+                        viewModel.updateListingsForLocation()
                         show.toggle()
                     }
                 } label: {
@@ -36,9 +39,10 @@ struct DestinationSearchView: View {
                 
                 Spacer()
                 
-                if !destination.isEmpty {
+                if !viewModel.searchLocation.isEmpty {
                     Button ("Clear") {
-                        destination = ""
+                        viewModel.searchLocation = ""
+                        viewModel.updateListingsForLocation()
                     }
                     .foregroundStyle(.black)
                     .font(.subheadline)
@@ -56,8 +60,12 @@ struct DestinationSearchView: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .imageScale(.small)
-                        TextField("Search destinations", text: $destination)
+                        TextField("Search destinations", text: $viewModel.searchLocation)
                             .font(.subheadline)
+                            .onSubmit {
+                                viewModel.updateListingsForLocation()
+                                show.toggle() // to dismiss the view
+                            }
                     }
                     .frame(height: 44)
                     .padding(.horizontal)
@@ -137,7 +145,7 @@ struct DestinationSearchView: View {
 
 struct DestinationSearchView_Previews: PreviewProvider {
     static var previews: some View {
-        DestinationSearchView(show: .constant(false))
+        DestinationSearchView(viewModel: ExploreViewModel(service: ExploreService()), show: .constant(false))
     }
 }
 
